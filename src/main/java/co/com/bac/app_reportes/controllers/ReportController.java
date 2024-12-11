@@ -17,11 +17,11 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @PostMapping("/{moduleId}")
-    public ResponseEntity<byte[]> generateReport(@PathVariable String moduleId,
+    @PostMapping("/{nombre}")
+    public ResponseEntity<byte[]> generateReport(@PathVariable String nombre,
                                                  @RequestBody ReporteRequest reporteRequest) {
         try {
-            byte[] report = reportService.generarReporte(moduleId, reporteRequest);
+            byte[] report = reportService.generarReporte(nombre, reporteRequest);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("inline", "report.pdf");
