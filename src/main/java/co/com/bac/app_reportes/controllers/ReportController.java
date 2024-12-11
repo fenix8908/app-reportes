@@ -17,18 +17,17 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @PostMapping("/{nombre}")
-    public ResponseEntity<byte[]> generateReport(@PathVariable String nombre,
-                                                 @RequestBody ReporteRequest reporteRequest) {
+    @PostMapping("/carga")
+    public ResponseEntity<?> generateReport(@RequestBody ReporteRequest reporteRequest) {
         try {
-            byte[] report = reportService.generarReporte(nombre, reporteRequest);
+            byte[] report = reportService.generarReporte(reporteRequest);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("inline", "report.pdf");
 
             return ResponseEntity.ok().headers(headers).body(report);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body(e.toString());
         }
     }
 }

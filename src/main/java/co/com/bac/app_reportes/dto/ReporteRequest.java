@@ -13,7 +13,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReporteRequest {
-    private String templateName;
-    private Map<String, Object> parameters;
-    private List<Object> data;
+    private String nombrePlantilla;
+    private Map<String, Object> parametros;
+    private List<Object> datos;
 }

@@ -4,6 +4,8 @@ import co.com.bac.app_reportes.dto.ReporteRequest;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,6 +18,8 @@ import java.io.InputStream;
 @Service
 public class ReportService {
 
+    private Logger log = LoggerFactory.getLogger(ReportService.class);
+
     private final ResourceLoader resourceLoader;
 
     @Value("${reports.template.path:/templates/}")
@@ -26,14 +30,15 @@ public class ReportService {
         this.resourceLoader = resourceLoader;
     }
 
-    public byte[] generarReporte(String templateName, ReporteRequest reporteRequest) {
+    public byte[] generarReporte(ReporteRequest reporteRequest) {
         try {
-            JasperReport jasperReport = cargarPlantilla(templateName);
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reporteRequest.getData());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reporteRequest.getParameters(), dataSource);
+            JasperReport jasperReport = cargarPlantilla(reporteRequest.getNombrePlantilla());
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reporteRequest.getDatos());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reporteRequest.getParametros(), dataSource);
 
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (JRException e) {
+            log.error(e.toString());
             throw new RuntimeException("Error generando el reporte de jasper", e);
         }
     }
@@ -59,6 +64,7 @@ public class ReportService {
 
             throw new RuntimeException("No se encontró la plantilla con nombre: " + nombrePlantilla);
         } catch (Exception e) {
+            log.error(e.toString());
             throw new RuntimeException("Error al cargar la plantilla de jasper: " + nombrePlantilla, e);
         }
     }

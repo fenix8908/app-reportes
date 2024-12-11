@@ -4,14 +4,14 @@
               xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
         http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
               name="SalesReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20"
-              topMargin="20" bottomMargin="20" uuid="12345-12345-12345">
+              topMargin="20" bottomMargin="20" uuid="dcefdb27-2c87-42b7-b3d8-87e081b9d06e">
 
     <!-- Parámetros -->
     <parameter name="titulo"/>
-    <parameter name="fechaReporte" class="java.time.LocalDate"/>
+    <parameter name="fechaReporte"/>
     <parameter name="Logo" class="java.io.InputStream"/>
 
-    <!-- Campos (para datos tabulares) -->
+    <!-- Campos -->
     <field name="nombreProducto"/>
     <field name="cantidad" class="java.lang.Integer"/>
     <field name="precio" class="java.lang.Double"/>
@@ -19,32 +19,58 @@
     <!-- Encabezado -->
     <title>
         <band height="50">
+            <rectangle>
+                <reportElement x="0" y="0" width="555" height="40" backcolor="#EEEEEE" mode="Opaque"/>
+            </rectangle>
+            <image>
+                <reportElement x="0" y="0" width="50" height="50"/>
+                <imageExpression><![CDATA[$P{Logo}]]></imageExpression>
+            </image>
             <textField>
-                <reportElement x="0" y="0" width="200" height="20"/>
+                <reportElement x="60" y="15" width="200" height="20"/>
                 <textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="400" y="0" width="100" height="20"/>
+                <reportElement x="400" y="15" width="100" height="20"/>
                 <textFieldExpression><![CDATA[$P{fechaReporte}.toString()]]></textFieldExpression>
             </textField>
         </band>
     </title>
 
-    <!-- Detalle (datos de la tabla) -->
+    <!-- Detalle -->
     <detail>
         <band height="20">
             <textField>
-                <reportElement x="0" y="0" width="150" height="20"/>
+                <reportElement x="0" y="0" width="150" height="20" forecolor="#000000" backcolor="#F2F2F2"/>
+                <textElement>
+                    <font fontName="Arial" size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{nombreProducto}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="150" y="0" width="50" height="20"/>
+                <reportElement x="150" y="0" width="50" height="20" forecolor="#000000" backcolor="#F2F2F2"/>
+                <textElement>
+                    <font fontName="Arial" size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="200" y="0" width="100" height="20"/>
+                <reportElement x="200" y="0" width="100" height="20" forecolor="#000000" backcolor="#F2F2F2"/>
+                <textElement>
+                    <font fontName="Arial" size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
             </textField>
         </band>
     </detail>
+
+    <!-- Pie de página -->
+    <pageFooter>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="20"/>
+                <text><![CDATA[Gracias por su compra.]]></text>
+            </staticText>
+        </band>
+    </pageFooter>
 </jasperReport>
