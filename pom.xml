@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.36</version> <!-- Agrega la versión específica -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -85,11 +85,15 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.13.0</version> <!-- Asegúrate de usar la versión adecuada -->
 				<configuration>
+					<source>21</source> <!-- Ajusta según tu versión de Java -->
+					<target>21</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>1.18.36</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
