@@ -1,6 +1,8 @@
 package co.com.bac.app_reportes.service;
 
 import co.com.bac.app_reportes.dto.ReporteRequest;
+import co.com.bac.app_reportes.entity.PlantillaEntity;
+import co.com.bac.app_reportes.repository.PlantillaRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -13,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 @Service
@@ -25,9 +28,33 @@ public class ReportService {
     @Value("${reports.template.path:/templates/}")
     private String templateBasePath;
 
+    private PlantillaRepository plantillaRepository;
+
     @Autowired
-    public ReportService(ResourceLoader resourceLoader) {
+    public ReportService(ResourceLoader resourceLoader, PlantillaRepository plantillaRepository) {
         this.resourceLoader = resourceLoader;
+        this.plantillaRepository = plantillaRepository;
+    }
+
+    public byte[] generarReporteBD(ReporteRequest reporteRequest) {
+        try {
+            // Buscar plantilla en la base de datos
+            PlantillaEntity template = plantillaRepository.findByNombre(reporteRequest.getNombrePlantilla())
+                    .orElseThrow(() -> new RuntimeException("Plantilla no encontrada: " + reporteRequest.getNombrePlantilla()));
+
+            // Cargar la plantilla como InputStream
+            InputStream templateInputStream = new ByteArrayInputStream(template.getContenido());
+            JasperReport jasperReport = JasperCompileManager.compileReport(templateInputStream);
+
+            // Usar los datos dinámicos del JSON
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reporteRequest.getDatos());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reporteRequest.getParametros(), dataSource);
+
+            // Exportar a PDF
+            return JasperExportManager.exportReportToPdf(jasperPrint);
+        } catch (Exception e) {
+            throw new RuntimeException("Error generando el reporte: " + e.getMessage(), e);
+        }
     }
 
     public byte[] generarReporte(ReporteRequest reporteRequest) {

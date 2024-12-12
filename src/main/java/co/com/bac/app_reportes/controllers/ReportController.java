@@ -20,7 +20,7 @@ public class ReportController {
     @PostMapping("/carga")
     public ResponseEntity<?> generateReport(@RequestBody ReporteRequest reporteRequest) {
         try {
-            byte[] report = reportService.generarReporte(reporteRequest);
+            byte[] report = reportService.generarReporteBD(reporteRequest);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("inline", "report.pdf");
