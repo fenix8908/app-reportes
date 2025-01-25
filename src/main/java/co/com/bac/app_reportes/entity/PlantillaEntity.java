@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -15,7 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlantillaEntity {
+public class PlantillaEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,6 @@ public class PlantillaEntity {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Lob
     @Column(nullable = false,name = "contenido")
     private byte[] contenido;
 
