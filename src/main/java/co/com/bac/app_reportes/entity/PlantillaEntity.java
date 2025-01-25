@@ -1,13 +1,9 @@
 package co.com.bac.app_reportes.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+
 import java.util.Date;
 
 @Entity(name = "plantillas")
@@ -15,7 +11,6 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class PlantillaEntity  {
 
     @Id
@@ -32,5 +27,8 @@ public class PlantillaEntity  {
     private byte[] contenido;
 
     @Column(name = "fechacreacion", nullable = false, updatable = false)
-    private Date fechaCreacion = new Date();
+    private Date fechaCreacion;
+
+    @Column(name = "version")
+    private String version;
 }
